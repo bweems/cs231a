@@ -1,0 +1,20 @@
+function [cd] = colorDistinctness(Sp)
+    cd = []
+    for i=1:size(Sp, 2)
+        total_dist = 0;
+        for j=1:size(Sp, 2)
+            p1 = Sp(i);
+            p2 = Sp(j);
+            if ~isnan(p2.) && ~isnan(p1
+            total_dist = total_dist + distance(p1, p2);
+        end
+        cd = [cd total_dist];
+    end
+    cd
+end
+
+function [dist] = distance(p1, p2)
+    a = [p1.L, p1.a, p1.b];
+    b = [p2.L, p2.a, p2.b];
+    dist = sqrt(sum((a - b) .^ 2));
+end

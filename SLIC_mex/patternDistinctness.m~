@@ -1,0 +1,19 @@
+function [pd] = patternDistinctness(l, Sp, coeff)
+    pd = [];
+    for i=1:max(l(:))
+        total_dist = 0;
+        p1 = Sp(i);
+        a = [p1.L, p1.a, p1.b];
+        pa
+        for j=1:max(l(:))
+            p2 = Sp(j);
+            b = [p2.L, p2.a, p2.b];
+            total_dist = total_dist + distance(a, b);
+        end
+        cd = [cd total_dist];
+    end
+end
+
+function [dist] = distance(a, b)
+    dist = sum(abs(a - b));
+end
