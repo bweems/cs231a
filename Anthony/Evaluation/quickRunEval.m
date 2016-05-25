@@ -1,0 +1,1 @@
+produceEvaluationGraphs('gtDir', 'evalDir', 'EvalOutput', 'PR Curve', 'ROC Curve', 'AUCScore');

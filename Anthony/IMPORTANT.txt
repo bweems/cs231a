@@ -1,0 +1,9 @@
+This code is not compatible with the newest version of matlab, run the 2013 version
+Use module load matlab/r2013b to do this
+
+The MSRA-A-SegmentationSaliencyMaps should contain all the saliency maps we will use
+to train our saliency map combinor.  Each subdirectory in that folder contains all images
+in the dataset with the saliency map produced according to a particular method of saliency.
+Directories 1 to 15 are the saliency maps produced by segmenting the image and classifying the
+saliency of each segment as was done in the DRFI codebase.  The same images should keep the same
+name accross directories.
