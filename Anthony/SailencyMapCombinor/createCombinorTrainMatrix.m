@@ -43,7 +43,7 @@ parfor imageIter = 1:numTrainingImages
     if strcmp(imName(2), '0')
       inx = 1:2;
     end
-    image = imread(fullfile(rawImageDir, imName(inx), strcat(imName, '.jpg')));
+    rawImage = imread(fullfile(rawImageDir, imName(inx), strcat(imName, '.jpg')));
 
     [imh, imw, ~] = size(rawImage);
     smaps = zeros(imh, imw, numSmapDirs);
