@@ -1,6 +1,8 @@
 % This file should use matlab 2016
 
-weightsOnly = false;
+rng(346374);
+
+weightsOnly = true;
 featuresOnly = false;
 
 totalNumImages = 5000;
@@ -53,39 +55,37 @@ parfor imageIter = 1:numTrainingImages
         smaps(:, :, smapDirIter) = imread(fullfile(imageSaliencyMapDir, ...
             smapDirectories(smapDirIter).name, strcat(imName, '.jpg')));
     end
-    gTruth = im2double(imread(fullfile(groundTruthDir, strcat(imName, '.png'))));
-    gTruth = 255*gTruth;
+    gTruth = imread(fullfile(groundTruthDir, strcat(imName, '.png')));
     
     % Find the combination weights that minimize error
 
-    t = tic;
-    errorFn = @(weights) weightsErrorFunction(weights, gTruth, smaps);
-    lb = zeros(numSmapDirs, 1);
-    ub = ones(numSmapDirs, 1);
-    Aeq = ones(1, numSmapDirs);
-    beq = 1;
-    correctWeights = fmincon(errorFn, ones(numSmapDirs, 1)/numSmapDirs, ...
-        [], [], Aeq, beq, lb, ub);
-%     correctWeights = particleswarm(errorFn, numSmapDirs, lb, ub);
-    correctWeights( correctWeights < 1e-6 ) = 0;
-    timeToSolveForWeights = toc(t)
+    correctWeights = findCorrectWeights(gTruth, smaps);
     
-    correctWeightsCellArray{imageIter, 1} = correctWeights;
+    correctWeightsCellArray{imageIter, 1} = correctWeights';
     
     end
 
     if ~weightsOnly
         % get features and put them in matricies
-        featureCellArray{imageIter, 1} = CombinorGlobalFeatures(rawImage);
+        featureCellArray{imageIter, 1} = combinorGlobalFeatures(rawImage);
     end
 end
 
-featureMatrix = cell2mat(featureCellArray);
-outputMatrix = cell2mat(correctWeightsCellArray);
-
 if ~weightsOnly
+	[~, featureSize] = size(featureCellArray{1});
+        featureMatrix = zeros(numTrainingImages, featureSize);
+        for i = 1:numTrainingImages
+	    featureMatrix(i, :) = featureCellArray{i};
+        end
+        % featureMatrix = cell2mat(featureCellArray); did not work
 	csvwrite('featureMatrix.csv', featureMatrix);
 end
-if ~featureOnly
+if ~featuresOnly
+        [~, numWeights] = size(correctWeightsCellArray{1});
+        outputMatrix = zeros(numTrainingImages, numWeights);
+        for i = 1:numTrainingImages
+            outputMatrix(i, :) = correctWeightsCellArray{i};
+        end
+	% outputMatrix = cell2mat(correctWeightsCellArray); did not work
 	csvwrite('outputMatrix.csv', outputMatrix);
 end

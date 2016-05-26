@@ -55,7 +55,7 @@ fid = fopen(fullfile(outputDir, AUCScoreName), 'w');
 fprintf(fid, '%8.3f', AUCScore);
 fclose(fid);
 
-dataMatrix = [truePositives; falsePositives; trueNegatives; falseNegatives; sailiencyThresholds];
+dataMatrix = [truePositives; falsePositives; trueNegatives; falseNegatives; saliencyThresholds];
 save('evalMatrix.mat', 'dataMatrix');
 
 end

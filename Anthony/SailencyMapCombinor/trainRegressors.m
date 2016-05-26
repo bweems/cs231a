@@ -1,3 +1,5 @@
+% This file does nothing at the moment
+
 function [] = trainRegressors( featureMatrix, outputMatrix, outputDir )
 
 [~, numRegressors] = size(outputMatrix);

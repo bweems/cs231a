@@ -1,1 +1,3 @@
-produceEvaluationGraphs('gtDir', 'evalDir', fullfile('..', 'test.txt'), 'EvalOutput', 'PR Curve', 'ROC Curve', 'AUCScore');
+inputDir = fullfile('..', 'DRFI-Output');
+outputDir = 'EvalOutput';
+produceEvaluationGraphs('gtDir', inputDir, fullfile('..', 'test.txt'), outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');

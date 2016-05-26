@@ -4,7 +4,7 @@ function [ smap ] = combineSmapsWithWeights( weights, smaps )
 
 smap = zeros(size(smaps(:, :, 1)));
 for i = 1:numel(weights)
-   smap = smap + exp(1.5 * smaps(:, :, i)) * weights(i); 
+   smap = smap + weights(i) * smaps(:, :, i); % exp(1.5 * smaps(:, :, i)); 
 end
 
 smap = smap / numel(weights);
