@@ -1,7 +1,3 @@
-%%%%%%
-% TODO see if the method we use supports batch training, this would make things alot easier
-% TODO remember to use the Training, Validation, Testing split, preferably the one this paper used.
-%%%%%%
 totalNumImages = 5000;
 trainingImageList = fullfile('..', 'train.txt');
 validationImageList = fullfile('..', 'valid.txt');
@@ -31,6 +27,8 @@ for ix = 1 : length(smapDirectories)
 end
 smapDirectories(ind) = [];
 numSmapDirs = length(smapDirectories);
+
+addpath(genpath('../Evalutation/')); % the function that computes the error needs this
 
 featureCellArray = {numTrainingImage, 1};
 correctWeightsCellArray = {numTrainingImage, 1};
