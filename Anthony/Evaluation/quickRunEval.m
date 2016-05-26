@@ -1,1 +1,1 @@
-produceEvaluationGraphs('gtDir', 'evalDir', 'EvalOutput', 'PR Curve', 'ROC Curve', 'AUCScore');
+produceEvaluationGraphs('gtDir', 'evalDir', fullfile('..', 'test.txt'), 'EvalOutput', 'PR Curve', 'ROC Curve', 'AUCScore');

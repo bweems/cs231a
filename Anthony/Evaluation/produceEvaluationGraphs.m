@@ -1,11 +1,16 @@
-function [] = produceEvaluationGraphs(groundTruthDir, evalDir, outputDir, PRCurveName, ROCCurveName, AUCScoreName)
+function [] = produceEvaluationGraphs(groundTruthDir, evalDir, imageNamesListFilePath, outputDir, PRCurveName, ROCCurveName, AUCScoreName)
 % Assumes the ground truths are binary (0 or 255)
 % Assumes all saliency maps are noramlized to be in the range 0 to 255
 % Assumes that each directory has .png files with matching names and these
 % matching names indicate the predicted/groundtruth saliency maps of the
 % same image
 
-evalImageNames = dir(fullfile(evalDir, '*.png'));
+fid = fopen(imageNamesListFilePath);
+imageNames = textscan(fid, '%s\n');
+imageNames = imageNames{1};
+numImages = length(imageNames);
+fclose(fid);
+
 mkdir(outputDir);
 
 saliencyThresholds = linspace(0, 255, 20);
@@ -14,9 +19,10 @@ falsePositives = zeros(length(saliencyThresholds), 1);
 trueNegatives = zeros(length(saliencyThresholds), 1);
 falseNegatives = zeros(length(saliencyThresholds), 1);
 
-for imageIter = 1:length(evalImageNames)
-    evalSMap = imread(fullfile(evalDir, evalImageNames(imageIter).name));
-    gtSMap = imread(fullfile(groundTruthDir, evalImageNames(imageIter).name));
+for imageIter = 1:numImages
+    [~, imName, imExt] = fileparts(imageNames{imageIter});
+    evalSMap = imread(fullfile(evalDir, strcat(imName, '.png')));
+    gtSMap = imread(fullfile(groundTruthDir, strcat(imName, '.png')));
     gtSMap = logical(gtSMap);
     [tp, fp, tn, fn] = imageStats(gtSMap, evalSMap, saliencyThresholds);
     truePositives = truePositives + tp;
