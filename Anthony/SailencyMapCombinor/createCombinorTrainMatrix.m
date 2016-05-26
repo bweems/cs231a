@@ -1,3 +1,5 @@
+% This file should use matlab 2016
+
 weightsOnly = false;
 featuresOnly = false;
 
@@ -31,10 +33,8 @@ end
 smapDirectories(ind) = [];
 numSmapDirs = length(smapDirectories);
 
-addpath(genpath('../Evalutation/')); % the function that computes the error needs this
-
-featureCellArray = {numTrainingImage, 1};
-correctWeightsCellArray = {numTrainingImage, 1};
+featureCellArray = {numTrainingImages, 1};
+correctWeightsCellArray = {numTrainingImages, 1};
 
 parfor imageIter = 1:numTrainingImages
     % Load the image, smaps, and ground truth
@@ -44,6 +44,8 @@ parfor imageIter = 1:numTrainingImages
       inx = 1:2;
     end
     rawImage = imread(fullfile(rawImageDir, imName(inx), strcat(imName, '.jpg')));
+
+    if ~featuresOnly
 
     [imh, imw, ~] = size(rawImage);
     smaps = zeros(imh, imw, numSmapDirs);
@@ -55,7 +57,6 @@ parfor imageIter = 1:numTrainingImages
     gTruth = 255*gTruth;
     
     % Find the combination weights that minimize error
-    if ~featuresOnly
 
     t = tic;
     errorFn = @(weights) weightsErrorFunction(weights, gTruth, smaps);
