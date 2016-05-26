@@ -46,8 +46,13 @@ parfor imageIter = 1:numImages
        continue;
     end
     
+    inx = 1;
+    if strcmp(imageNameList(imageIter).name(2), '0')
+      inx = 1:2;
+    end
+
     rawImage = imread(fullfile(rawImageDir, ...
-        imageNameList(imageIter).name(1), ...
+        imageNameList(imageIter).name(inx), ...
         imageNameList(imageIter).name));
 
     [imh, imw] = size(rawImage);

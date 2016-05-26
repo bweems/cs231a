@@ -1,53 +1,47 @@
-outputDir = fullfile('DRFI-Output');
+cd('drfi_code_cvpr2013');
+
+addpath(genpath('.'));
+% load classifiers
+% classifier for multiple segmentations
+load('./trained_classifiers/same_label_classifier_200_20.mat');
+classifiers.same_label_classifier = same_label_classifier;
+classifiers.ecal = ecal;
+
+% classifier for saliency regression
+load( './trained_classifiers/segment_saliency_regressor_48_segmentations_MSRA_200_15_compressed_rf.mat' );
+classifiers.segment_saliency_regressor = segment_saliency_regressor;
+
+% parameters including the number of segmentations and saliency fusion
+% weight
+para = makeDefaultParameters();
+
+outputDir = fullfile('..', 'DRFI-Output');
 mkdir(outputDir);
 
-cd('drfi_code_cvpr2013');
-para = makeDefaultParameters();
-w = para.w;
-cd('..')
+fid = fopen(fullfile('..', 'test.txt'));
+imageNames = textscan(fid, '%s\n');
+imageNames = imageNames{1};
+numImages = length(imageNames);
+fclose(fid);
 
-imageSaliencyMapDir = fullfile('MSRA-B-SegmentationSaliencyMaps');
+rawImageDir = fullfile('..', 'MSRA-B');
 
-smapDirectories = dir(imageSaliencyMapDir);
-% Remove '.' and '..'
-ind = [];
-for ix = 1 : length(smapDirectories)
-    if strcmp(smapDirectories(ix).name, '.') || strcmp(smapDirectories(ix).name, '..') ...
-            || strcmp(smapDirectories(ix).name, 'Progress.txt')
-        ind = [ind ix];
-        continue;
-    end
-end
-smapDirectories(ind) = [];
-numSmapDirs = length(smapDirectories);
+parfor i=1:numImages
+    fprintf('ImageIter %d\n', i);
 
-imageNameList = dir(fullfile(imageSaliencyMapDir, '1', '*.jpg'));
-numImages = length(imageNameList);
-
-parfor imageIter = 1:numImages
-
-    outputFile = fullfile(outputDir, imageNameList(imageIter).name);
-
+    outputFile = fullfile(outputDir, imageNames{i});
     if exist(outputFile, 'file')
        continue;
     end
 
-    temp_smap = imread(fullfile(imageSaliencyMapDir, '1', imageNameList(imageIter).name))
-    temp_smap = im2double(temp_smap);
-    smap = w(1) * exp( 1.5 * temp_smap );
-    for segmentationIter = 2:numSmapDirs
-      temp_smap = imread(fullfile(imageSaliencyMapDir, int2str(segmentationIter), imageNameList(imageIter).name));
-      temp_smap = im2double(temp_smap);
-      % saliency map fusion
-      % a little bit tricky,
-      % exp() is used to enhance the difference of the saliency between the object and the background
-      smap = smap + w(segmentationIter) * exp( 1.5 * temp_smap );
-      % smap = smap + w(s) * temp_smap;
+    [~, imName, imExt] = fileparts(imageNames{i});
+    inx = 1;
+    if strcmp(imName(2), '0')
+      inx = 1:2;
     end
-
-
-    smap = smap / num_segmentation;
-    smap = (smap - min(smap(:))) / (max(smap(:)) - min(smap(:)) + eps) * 255;
-    smap = uint8(smap);
+    image = imread(fullfile(rawImageDir, imName(inx), strcat(imName, '.jpg')));
+    
+    smap = Saliency_DRFI(image, classifiers, para, []);
     imwrite(smap, outputFile);
 end
+

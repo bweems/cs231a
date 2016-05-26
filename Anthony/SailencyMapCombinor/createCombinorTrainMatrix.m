@@ -1,3 +1,6 @@
+weightsOnly = false;
+featuresOnly = false;
+
 totalNumImages = 5000;
 trainingImageList = fullfile('..', 'train.txt');
 validationImageList = fullfile('..', 'valid.txt');
@@ -36,7 +39,12 @@ correctWeightsCellArray = {numTrainingImage, 1};
 parfor imageIter = 1:numTrainingImages
     % Load the image, smaps, and ground truth
     [~, imName, imExt] = fileparts(trainingImageNames{imageIter});
-    rawImage = imread(fullfile(rawImageDir, imName(1), strcat(imName, '.jpg')));
+    inx = 1;
+    if strcmp(imName(2), '0')
+      inx = 1:2;
+    end
+    image = imread(fullfile(rawImageDir, imName(inx), strcat(imName, '.jpg')));
+
     [imh, imw, ~] = size(rawImage);
     smaps = zeros(imh, imw, numSmapDirs);
     for smapDirIter = 1:numSmapDirs
@@ -47,6 +55,8 @@ parfor imageIter = 1:numTrainingImages
     gTruth = 255*gTruth;
     
     % Find the combination weights that minimize error
+    if ~featuresOnly
+
     t = tic;
     errorFn = @(weights) weightsErrorFunction(weights, gTruth, smaps);
     lb = zeros(numSmapDirs, 1);
@@ -61,12 +71,20 @@ parfor imageIter = 1:numTrainingImages
     
     correctWeightsCellArray{imageIter, 1} = correctWeights;
     
-    % get features and put them in matricies
-    featureCellArray{imageIter, 1} = CombinorGlobalFeatures(rawImage);
+    end
+
+    if ~weightsOnly
+        % get features and put them in matricies
+        featureCellArray{imageIter, 1} = CombinorGlobalFeatures(rawImage);
+    end
 end
 
 featureMatrix = cell2mat(featureCellArray);
 outputMatrix = cell2mat(correctWeightsCellArray);
 
-csvwrite('featureMatrix.csv', featureMatrix);
-csvwrite('outputMatrix.csv', outputMatrix);
+if ~weightsOnly
+	csvwrite('featureMatrix.csv', featureMatrix);
+end
+if ~featureOnly
+	csvwrite('outputMatrix.csv', outputMatrix);
+end
