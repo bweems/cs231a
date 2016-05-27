@@ -13,7 +13,7 @@ fclose(fid);
 
 mkdir(outputDir);
 
-saliencyThresholds = [linspace(0, 255, 70), Inf];
+saliencyThresholds = [-Inf, linspace(0, 255, 70), Inf];
 truePositives = zeros(length(saliencyThresholds), 1);
 falsePositives = zeros(length(saliencyThresholds), 1);
 trueNegatives = zeros(length(saliencyThresholds), 1);
@@ -70,7 +70,7 @@ print(rocCurve, fullfile(outputDir, ROCCurveName),'-dpng')
 
 AUCScore = trapz(flipud(falsePositiveRate), flipud(recall));
 fid = fopen(fullfile(outputDir, AUCScoreName), 'w');
-fprintf(fid, '%8.3f\n', AUCScore);
+fprintf(fid, '%8.8f\n', AUCScore);
 fclose(fid);
 
 dataMatrix = [truePositives'; falsePositives'; trueNegatives'; falseNegatives'; saliencyThresholds];
