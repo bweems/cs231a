@@ -1,5 +1,9 @@
 # cs231a
 
+Install/setup
+under the Anthony directory put the MSRA-B directory and the MSRA-B-annot direcotry
+put the drfi code under the Anthony dirctory as well
+
 Use generateSegmentationSaliencyMaps to produce the intermediate saliency maps the DRFI paper uses
 Then, use createCombinorTrainMatrix to create the feature and correct weight matricies
 Then use generateKNNSaliencyMaps or use generateGMMSaliencyMaps to produce the final saliency maps for our method

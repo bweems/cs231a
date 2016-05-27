@@ -13,11 +13,16 @@ fclose(fid);
 
 mkdir(outputDir);
 
-saliencyThresholds = linspace(0, 255, 20);
+saliencyThresholds = [linspace(0, 255, 70), Inf];
 truePositives = zeros(length(saliencyThresholds), 1);
 falsePositives = zeros(length(saliencyThresholds), 1);
 trueNegatives = zeros(length(saliencyThresholds), 1);
 falseNegatives = zeros(length(saliencyThresholds), 1);
+
+best = 0;
+bestScore = -Inf;
+worst = 0;
+worstScore = Inf;
 
 for imageIter = 1:numImages
     [~, imName, imExt] = fileparts(imageNames{imageIter});
@@ -29,6 +34,19 @@ for imageIter = 1:numImages
     falsePositives = falsePositives + fp;
     trueNegatives = trueNegatives + tn;
     falseNegatives = falseNegatives + fn;
+
+    score = (tp + tn) ./ (tp + fp + tn + fn);
+    score = max(score);
+
+    if score > bestScore
+	best = imageIter;
+        bestScore = score;
+    end
+    if score < worstScore
+	worst = imageIter;
+        worstScore = score;
+    end
+
     imageIter
 end
 
@@ -52,11 +70,31 @@ print(rocCurve, fullfile(outputDir, ROCCurveName),'-dpng')
 
 AUCScore = trapz(flipud(falsePositiveRate), flipud(recall));
 fid = fopen(fullfile(outputDir, AUCScoreName), 'w');
-fprintf(fid, '%8.3f', AUCScore);
+fprintf(fid, '%8.3f\n', AUCScore);
 fclose(fid);
 
 dataMatrix = [truePositives'; falsePositives'; trueNegatives'; falseNegatives'; saliencyThresholds];
 save(fullfile(outputDir, 'evalMatrix.mat'), 'dataMatrix');
+
+fid = fopen(fullfile(outputDir, 'bestImage.txt'), 'w');
+fprintf(fid, imageNames{best});
+fclose(fid);
+
+fid = fopen(fullfile(outputDir, 'worstImage.txt'), 'w');
+fprintf(fid, imageNames{worst});
+fclose(fid);
+
+
+    [~, imName, imExt] = fileparts(imageNames{best});
+    evalSMap = imread(fullfile(evalDir, strcat(imName, evalFileExtension)));
+
+imwrite(evalSMap, fullfile(outputDir, 'best.png'));
+
+
+    [~, imName, imExt] = fileparts(imageNames{worst});
+    evalSMap = imread(fullfile(evalDir, strcat(imName, evalFileExtension)));
+
+   imwrite(evalSMap, fullfile(outputDir, 'worst.png'));
 
 end
 
