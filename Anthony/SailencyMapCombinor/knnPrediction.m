@@ -4,7 +4,7 @@ function [smap] = knnPrediction(featureMatrix, correctWeightsMatrix, image, smap
 	% featureMatrix and correctWeightsMatrix should match
 % smaps should be the saliency maps to combine with the weights
 
-imageFeatures = CombinorGlobalFeatures(image);
+imageFeatures = combinorGlobalFeatures(image);
 
 indicies = knnsearch(featureMatrix, imageFeatures, 'K', K);
 indicies = indicies';

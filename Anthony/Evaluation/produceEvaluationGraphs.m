@@ -1,4 +1,4 @@
-function [] = produceEvaluationGraphs(groundTruthDir, evalDir, imageNamesListFilePath, outputDir, PRCurveName, ROCCurveName, AUCScoreName)
+function [] = produceEvaluationGraphs(groundTruthDir, evalDir, evalFileExtension, imageNamesListFilePath, outputDir, PRCurveName, ROCCurveName, AUCScoreName)
 % Assumes the ground truths are binary (0 or 255)
 % Assumes all saliency maps are noramlized to be in the range 0 to 255
 % Assumes that each directory has .png files with matching names and these
@@ -21,7 +21,7 @@ falseNegatives = zeros(length(saliencyThresholds), 1);
 
 for imageIter = 1:numImages
     [~, imName, imExt] = fileparts(imageNames{imageIter});
-    evalSMap = imread(fullfile(evalDir, strcat(imName, '.png')));
+    evalSMap = imread(fullfile(evalDir, strcat(imName, evalFileExtension)));
     gtSMap = imread(fullfile(groundTruthDir, strcat(imName, '.png')));
     gtSMap = logical(gtSMap);
     [tp, fp, tn, fn] = imageStats(gtSMap, evalSMap, saliencyThresholds);
@@ -55,8 +55,8 @@ fid = fopen(fullfile(outputDir, AUCScoreName), 'w');
 fprintf(fid, '%8.3f', AUCScore);
 fclose(fid);
 
-dataMatrix = [truePositives; falsePositives; trueNegatives; falseNegatives; saliencyThresholds];
-save('evalMatrix.mat', 'dataMatrix');
+dataMatrix = [truePositives'; falsePositives'; trueNegatives'; falseNegatives'; saliencyThresholds];
+save(fullfile(outputDir, 'evalMatrix.mat'), 'dataMatrix');
 
 end
 

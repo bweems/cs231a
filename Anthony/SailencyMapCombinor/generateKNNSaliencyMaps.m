@@ -22,9 +22,9 @@ correctWeightsMatrix = csvread('outputMatrix.csv');
 imageNameList = dir(fullfile(imageSaliencyMapDir, '1', '*.jpg'));
 numImages = length(imageNameList);
 
-K = 5;
+K = 10;
 
-parfor imageIter = 1:numImages
+for imageIter = 1:numImages
 
     outputFile = fullfile(outputDir, imageNameList(imageIter).name);
 
@@ -41,7 +41,7 @@ parfor imageIter = 1:numImages
         imageNameList(imageIter).name(inx), ...
         imageNameList(imageIter).name));
 
-    [imh, imw] = size(rawImage);
+    [imh, imw, ~] = size(rawImage);
     smaps = zeros(imh, imw, numSmapDirs);
     for segmentationIter = 1:numSmapDirs
       smaps(:, :, segmentationIter) = im2double(imread( ...
@@ -49,7 +49,7 @@ parfor imageIter = 1:numImages
           imageNameList(imageIter).name)));
     end
     
-    smap = knnPrediction(featureMatrix, correctWeightsMatrix, rawImage, smaps, K)
+    smap = knnPrediction(featureMatrix, correctWeightsMatrix, rawImage, smaps, K);
 
     imwrite(smap, outputFile);
 end

@@ -39,6 +39,8 @@ for i = 1:numClusters
 end
 
 parfor imageIter = 1:numImages
+    
+    fprintf('Image iter: %d\n', imageIter);
 
     outputFile = fullfile(outputDir, imageNameList(imageIter).name);
 
@@ -55,23 +57,22 @@ parfor imageIter = 1:numImages
         imageNameList(imageIter).name(inx), ...
         imageNameList(imageIter).name));
 
-    [imh, imw] = size(rawImage);
+    [imh, imw, ~] = size(rawImage);
     smaps = zeros(imh, imw, numSmapDirs);
     for segmentationIter = 1:numSmapDirs
       smaps(:, :, segmentationIter) = im2double(imread( ...
-          fullfile(imageSaliencyMapDir, int2str(segmentationIter), ...
-          imageNameList(imageIter).name)));
+          fullfile( imageSaliencyMapDir, int2str(segmentationIter), imageNameList(imageIter).name )));
     end
     
     % weight and smap prediction using GMM
     imageFeatures = combinorGlobalFeatures(rawImage);
-    clusterScores = posteriors(GMModel, imageFeatures);
+    clusterScores = posterior(GMModel, imageFeatures);
     clusterScores = clusterScores / sum(clusterScores);
     weights = zeros(1, numWeights);
     for clusIter = 1:numClusters
-       weights = weights + clusterWeights(clusIter, :) * clusterScores(clusIter) 
+       weights = weights + clusterWeights(clusIter, :) * clusterScores(clusIter);
     end
-    smap = combineSmapsWithWeights( weights, smaps )
+    smap = combineSmapsWithWeights( weights, smaps );
 
     imwrite(smap, outputFile);
 end

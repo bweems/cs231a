@@ -2,8 +2,8 @@
 
 rng(346374);
 
-weightsOnly = true;
-featuresOnly = false;
+weightsOnly = false;
+featuresOnly = true;
 
 totalNumImages = 5000;
 trainingImageList = fullfile('..', 'train.txt');
@@ -39,6 +39,9 @@ featureCellArray = {numTrainingImages, 1};
 correctWeightsCellArray = {numTrainingImages, 1};
 
 parfor imageIter = 1:numTrainingImages
+    
+    fprintf('Image Iteration %d\n', imageIter);
+
     % Load the image, smaps, and ground truth
     [~, imName, imExt] = fileparts(trainingImageNames{imageIter});
     inx = 1;
