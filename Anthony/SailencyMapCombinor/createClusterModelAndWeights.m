@@ -42,9 +42,9 @@ fclose(fid);
 
 clusterWeights = zeros(numClusters, numWeights);
 
-for clusterIter = 1:numClusters
+parfor clusterIter = 1:numClusters
     clusterImageNames = trainingImageNames(clusterAssignments == clusterIter);
-    clusterWeights(i, :) = findCorrectWeightsForCluster(clusterImageNames)';
+    clusterWeights(clusterIter, :) = findCorrectWeightsForCluster(clusterImageNames)';
 end
 
 save(fullfile(outputDir, 'ClusterWeights.mat'), 'clusterWeights');
