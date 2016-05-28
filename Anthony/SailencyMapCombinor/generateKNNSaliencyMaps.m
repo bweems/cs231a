@@ -22,7 +22,7 @@ correctWeightsMatrix = csvread('outputMatrix.csv');
 imageNameList = dir(fullfile(imageSaliencyMapDir, '1', '*.jpg'));
 numImages = length(imageNameList);
 
-K = 10;
+K = 20;
 
 for imageIter = 1:numImages
 

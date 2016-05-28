@@ -2,8 +2,6 @@
 % switched for GMM parts
 
 rawImageDir = fullfile('..', 'MSRA-B');
-outputDir = fullfile('GMMOutput');
-mkdir(outputDir);
 
 imageSaliencyMapDir = fullfile('..', 'MSRA-B-SegmentationSaliencyMaps');
 smapDirectories = dir(imageSaliencyMapDir);
@@ -19,42 +17,25 @@ end
 smapDirectories(ind) = [];
 numSmapDirs = length(smapDirectories);
 
-featureMatrix = csvread('featureMatrix.csv');
-correctWeightsMatrix = csvread('outputMatrix.csv');
+modelsDir = 'ClusterModels';
+load(fullfile(modelsDir, 'GMModel.mat')); % 'BestModel'
+load(fullfile(modelsDir, 'ClusterWeights.mat')); %'clusterWeights');
 
 imageNameList = dir(fullfile(imageSaliencyMapDir, '1', '*.jpg'));
 numImages = length(imageNameList);
 
-rng(123573);
-[numDataPoints, numWeights] = size(correctWeightsMatrix);
-
-numClusterList = 6:20;
-AIC = zeros(1,length(numClusterList));
-GMModels = cell(1,length(numClusterList));
-for i = 1:length(numClusterList)
-    fprintf('%d\n', i);
-    GMModels{i} = fitgmdist(featureMatrix,numClusterList(i),'RegularizationValue', 0.01);
-    AIC(i)= GMModels{i}.AIC;
-end
-
-[minAIC,index] = min(AIC);
-
-GMModel = GMModels{index};
-numClusters = numClusterList(index);
-
-clusterWeights = zeros(numClusters, numWeights);
-clusterAssignments = cluster(GMModel, featureMatrix);
-for i = 1:numClusters
-    clusterWeights(i, :) = mean(correctWeightsMatrix(clusterAssignments == i, :));
-end
+softOutputDir = fullfile('SoftClusterModelOutput');
+mkdir(softOutputDir);
+hardOutputDir = fullfile('HardClusterModelOutput');
+mkdir(hardOutputDir);
 
 parfor imageIter = 1:numImages
     
     fprintf('Image iter: %d\n', imageIter);
 
-    outputFile = fullfile(outputDir, imageNameList(imageIter).name);
+    softOutputFile = fullfile(softOutputDir, imageNameList(imageIter).name);
 
-    if exist(outputFile, 'file')
+    if exist(softOutputFile, 'file')
        continue;
     end
     
@@ -76,7 +57,7 @@ parfor imageIter = 1:numImages
     
     % weight and smap prediction using GMM
     imageFeatures = combinorGlobalFeatures(rawImage);
-    clusterScores = posterior(GMModel, imageFeatures);
+    clusterScores = posterior(BestModel, imageFeatures);
     clusterScores = clusterScores / sum(clusterScores);
     weights = zeros(1, numWeights);
     for clusIter = 1:numClusters
@@ -84,5 +65,13 @@ parfor imageIter = 1:numImages
     end
     smap = combineSmapsWithWeights( weights, smaps );
 
-    imwrite(smap, outputFile);
+    imwrite(smap, softOutputFile);
+    
+    
+    hardOutputFile = fullfile(hardOutputDir, imageNameList(imageIter).name);
+    
+    clusterIndex = cluster(BestModel, imageFeatures);
+    smap = combineSmapsWithWeights( clusterWeights(clusterIndex, :), smaps );
+
+    imwrite(smap, hardOutputFile);
 end

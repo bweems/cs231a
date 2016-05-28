@@ -20,7 +20,7 @@ end
 [minAIC,index] = min(AIC);
 
 BestModel = GMModels{index};
-numClusters = numClusterList(i);
+numClusters = numClusterList(index);
 
 save(fullfile(outputDir, 'GMModel.mat'), 'BestModel');
 
@@ -43,7 +43,7 @@ fclose(fid);
 clusterWeights = zeros(numClusters, numWeights);
 
 for clusterIter = 1:numClusters
-    clusterImageNames = trainingImageNames{clusterAssignments == clusterIter};
+    clusterImageNames = trainingImageNames(clusterAssignments == clusterIter);
     clusterWeights(i, :) = findCorrectWeightsForCluster(clusterImageNames)';
 end
 

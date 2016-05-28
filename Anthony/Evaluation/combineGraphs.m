@@ -4,7 +4,7 @@ PRCurveName = 'PR Curve';
 ROCCurveName = 'ROC Curve';
 
 inputDir = {'DRFIEvalOutput'};
-inputDir = {inputDir{:}, 'DRFIWithUniformWeightsEvalOutput'}
+inputDir = {inputDir{:}, 'DRFIWithUniformWeightsEvalOutput'};
 inputDir = {inputDir{:}, 'KNNEvalOutputOldFeatures15Segments'};
 inputDir = {inputDir{:}, 'GMMEvalOutputOldFeatures15Segments'};
 inputNames = {'DRFI', 'Uniform', 'KNN', 'GMM'};
