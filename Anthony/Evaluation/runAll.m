@@ -1,23 +1,36 @@
+imageNamesFile = fullfile('..', 'test.txt');
+outputSuffix = '';
+
 inputDir = fullfile('..', 'SailencyMapCombinor', 'KNNOutput');
-outputDir = 'KNNEvalOutputOldFeatures15Segments';
+outputDir = strcat('KNNEvalOutputOldFeatures15Segments', outputSuffix);
 inputFileExtension = '.jpg';
-produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, fullfile('..', 'test.txt'), outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
+%produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
 
 inputDir = fullfile('..', 'SailencyMapCombinor', 'GMMOutput');
-outputDir = 'GMMEvalOutputOldFeatures15Segments';
+outputDir = strcat('GMMEvalOutputOldFeatures15Segments', outputSuffix);
 inputFileExtension = '.jpg';
-produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, fullfile('..', 'test.txt'), outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
+%produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
+
+inputDir = fullfile('..', 'SailencyMapCombinor', 'SoftClusterModelOutput');
+outputDir = strcat('SoftClusterModelEvalOutputOldFeatures15Segments', outputSuffix);
+inputFileExtension = '.jpg';
+produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
+
+inputDir = fullfile('..', 'SailencyMapCombinor', 'HardClusterModelOutput');
+outputDir = strcat('HardClusterModelEvalOutputOldFeatures15Segments', outputSuffix);
+inputFileExtension = '.jpg';
+produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
 
 
 inputDir = fullfile('..', 'DRFI-Output');
-outputDir = 'DRFIEvalOutput';
+outputDir = strcat('DRFIEvalOutput', outputSuffix);
 inputFileExtension = '.png';
-produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, fullfile('..', 'test.txt'), outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
+%produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
 
 inputDir = fullfile('..', 'DRFI-UW-Output');
-outputDir = 'DRFIWithUniformWeightsEvalOutput';
+outputDir = strcat('DRFIWithUniformWeightsEvalOutput', outputSuffix);
 inputFileExtension = '.png';
-produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, fullfile('..', 'test.txt'), outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
+%produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
 
 
 

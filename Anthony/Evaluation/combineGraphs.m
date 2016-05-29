@@ -3,11 +3,16 @@ mkdir(outputDir);
 PRCurveName = 'PR Curve';
 ROCCurveName = 'ROC Curve';
 
+% Note that I added the Train suffix to the inputDirs and outputDir
+
 inputDir = {'DRFIEvalOutput'};
 inputDir = {inputDir{:}, 'DRFIWithUniformWeightsEvalOutput'};
 inputDir = {inputDir{:}, 'KNNEvalOutputOldFeatures15Segments'};
 inputDir = {inputDir{:}, 'GMMEvalOutputOldFeatures15Segments'};
-inputNames = {'DRFI', 'Uniform', 'KNN', 'GMM'};
+inputDir = {inputDir{:}, 'SoftClusterModelEvalOutputOldFeatures15Segments'};
+inputDir = {inputDir{:}, 'HardClusterModelEvalOutputOldFeatures15Segments'};
+inputNames = { 'DRFI', 'Uniform', ...
+	'KNN', 'GMM', 'Soft', 'Hard'};
 
 prCurve = figure('visible','off');
 ylabel('Precision');
@@ -59,8 +64,6 @@ print(rocCurve, fullfile(outputDir, ROCCurveName),'-dpng')
 hold off
 
 aucPlot = figure('visible', 'off');
-ylabel('AUC Score');
-title('AUC Comparison');
 aucScores = zeros(1, length(inputDir));
 for i = 1:length(inputDir)
    fid = fopen(fullfile(inputDir{i}, 'AUCScore'));
@@ -70,6 +73,7 @@ end
 bar(aucScores);
 set( gca, 'XTickLabels', inputNames);
 ylim([0.9, 1.0]);
+ylabel('AUC Score');
+title('AUC Comparison');
 print(aucPlot, fullfile(outputDir, 'AUC Plot'), '-dpng')
-
 

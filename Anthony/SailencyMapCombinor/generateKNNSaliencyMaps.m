@@ -24,8 +24,10 @@ numImages = length(imageNameList);
 
 K = 20;
 
-for imageIter = 1:numImages
+parfor imageIter = 1:numImages
 
+    fprintf('Image Iter: %d\n', imageIter);
+    
     outputFile = fullfile(outputDir, imageNameList(imageIter).name);
 
     if exist(outputFile, 'file')
