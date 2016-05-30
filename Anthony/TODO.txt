@@ -1,0 +1,16 @@
+Get the other data sets so that we can compare our results across other data sets
+
+Things to plot: amount of training data versus error (AUC score)
+They use Precision versus recall
+They use True positives versus false positives
+AUC scores (Area under the ROC curve) compares to other methods
+
+ROC receiver operating characteristic
+Precision corresponds to the percentage of salient pixels correctly assigned
+recall is the fraction of detected salient pixels belonging to the salient object in the ground truth
+
+They generated thePR curve by varying the threshold that determines whether a pixel is salient.
+
+Cluster the training images first, then solve for the correct weights of each 
+cluster using their LearnSaliencyFusionWeights code, and the at run time just find which
+cluster the image belongs to and use those weights.
