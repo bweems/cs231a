@@ -34,7 +34,7 @@ for i = 1:length(inputDir)
    plot(recall, precision);
 end
 
-legend(inputNames);
+legend(inputNames, 'Location', 'SouthWest');
 print(prCurve, fullfile(outputDir, PRCurveName),'-dpng')
 hold off
 

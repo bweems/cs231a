@@ -28,7 +28,7 @@ end
 progressFile = fullfile(outputDir, 'Progress.txt');
 
 numSeg = para.num_segmentation;
-for i=0:9
+for i=horzcat(0:7, 9:10)
     if exist(progressFile, 'file')
        fid = fopen(progressFile, 'r');
        lastDir = fgetl(fid);

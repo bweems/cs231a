@@ -4,6 +4,9 @@ Install/setup
 under the Anthony directory put the MSRA-B directory and the MSRA-B-annot direcotry
 put the drfi code under the Anthony dirctory as well
 
+Note: all files expect to be run from the directory they are housed in.
+Data set directories should only contain the approproate images, beware of compression artifacts
+
 Use generateSegmentationSaliencyMaps to produce the intermediate saliency maps the DRFI paper uses
 Then, use createCombinorTrainMatrix to create the feature and correct weight matricies
 Then use generateKNNSaliencyMaps or use generateGMMSaliencyMaps to produce the final saliency maps for our method
