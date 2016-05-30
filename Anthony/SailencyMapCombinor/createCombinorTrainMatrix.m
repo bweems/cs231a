@@ -35,6 +35,9 @@ end
 smapDirectories(ind) = [];
 numSmapDirs = length(smapDirectories);
 
+load(fullfile('BOW.mat'));
+featureExtractorParams = bag;
+
 featureCellArray = {numTrainingImages, 1};
 correctWeightsCellArray = {numTrainingImages, 1};
 
@@ -70,7 +73,7 @@ parfor imageIter = 1:numTrainingImages
 
     if ~weightsOnly
         % get features and put them in matricies
-        featureCellArray{imageIter, 1} = combinorGlobalFeatures(rawImage);
+        featureCellArray{imageIter, 1} = combinorGlobalFeatures(rawImage, featureExtractorParams);
     end
 end
 
