@@ -7,7 +7,7 @@ numImages = length(imageNames);
 fclose(fid);
 
 for i = 1:numImages
-    [~, imName, imExt] = fileparts(imageNames{imageIter});
+    [~, imName, imExt] = fileparts(imageNames{i});
     inx = 1;
     if strcmp(imName(2), '0')
       inx = 1:2;
