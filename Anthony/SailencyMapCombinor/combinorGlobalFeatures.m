@@ -13,6 +13,6 @@ function [ imageFeatures ] = CombinorGlobalFeatures( image, bag )
 
   % If you don't normalize resize so that the hisograms of larger images do not
   % have higher numbers than comparable smaller images
-  imageFeatures = encode(bad, image, 'Normalization', 'L2');
+  imageFeatures = encode(bag, image, 'Normalization', 'L2');
 
 end

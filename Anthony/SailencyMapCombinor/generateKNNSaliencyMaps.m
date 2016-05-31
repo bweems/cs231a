@@ -1,5 +1,5 @@
 rawImageDir = fullfile('..', 'MSRA-B');
-outputDir = fullfile('KNNOutput');
+outputDir = fullfile('KNNOutputBOW');
 mkdir(outputDir);
 
 imageSaliencyMapDir = fullfile('..', 'MSRA-B-SegmentationSaliencyMaps');
@@ -23,6 +23,9 @@ imageNameList = dir(fullfile(imageSaliencyMapDir, '1', '*.jpg'));
 numImages = length(imageNameList);
 
 K = 20;
+load('BOW.mat');
+featureParameters = bag;
+
 
 parfor imageIter = 1:numImages
 
@@ -51,7 +54,7 @@ parfor imageIter = 1:numImages
           imageNameList(imageIter).name)));
     end
     
-    smap = knnPrediction(featureMatrix, correctWeightsMatrix, rawImage, smaps, K);
+    smap = knnPrediction(featureMatrix, correctWeightsMatrix, rawImage, smaps, K, featureParameters);
 
     imwrite(smap, outputFile);
 end

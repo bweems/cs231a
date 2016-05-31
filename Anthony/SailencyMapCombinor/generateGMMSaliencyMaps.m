@@ -2,7 +2,7 @@
 % switched for GMM parts
 
 rawImageDir = fullfile('..', 'MSRA-B');
-outputDir = fullfile('GMMOutput');
+outputDir = fullfile('GMMOutputBOW')
 mkdir(outputDir);
 
 imageSaliencyMapDir = fullfile('..', 'MSRA-B-SegmentationSaliencyMaps');
@@ -28,11 +28,11 @@ numImages = length(imageNameList);
 rng(123573);
 [numDataPoints, numWeights] = size(correctWeightsMatrix);
 
-numClusterList = 6:20;
+numClusterList = 7:20;
 AIC = zeros(1,length(numClusterList));
 GMModels = cell(1,length(numClusterList));
 for i = 1:length(numClusterList)
-    fprintf('%d\n', i);
+    fprintf('Trying GMM %d clusters of %d \n', i, length(numClusterList));
     GMModels{i} = fitgmdist(featureMatrix,numClusterList(i),'RegularizationValue', 0.01);
     AIC(i)= GMModels{i}.AIC;
 end
@@ -40,13 +40,16 @@ end
 [minAIC,index] = min(AIC);
 
 GMModel = GMModels{index};
-numClusters = numClusterList(index);
+numClusters = numClusterList(index)
 
 clusterWeights = zeros(numClusters, numWeights);
 clusterAssignments = cluster(GMModel, featureMatrix);
 for i = 1:numClusters
     clusterWeights(i, :) = mean(correctWeightsMatrix(clusterAssignments == i, :));
 end
+
+load('BOW.mat');
+featureParameters = bag;
 
 parfor imageIter = 1:numImages
     
@@ -75,7 +78,7 @@ parfor imageIter = 1:numImages
     end
     
     % weight and smap prediction using GMM
-    imageFeatures = combinorGlobalFeatures(rawImage);
+    imageFeatures = combinorGlobalFeatures(rawImage, featureParameters);
     clusterScores = posterior(GMModel, imageFeatures);
     clusterScores = clusterScores / sum(clusterScores);
     weights = zeros(1, numWeights);

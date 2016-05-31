@@ -24,10 +24,13 @@ load(fullfile(modelsDir, 'ClusterWeights.mat')); %'clusterWeights');
 imageNameList = dir(fullfile(imageSaliencyMapDir, '1', '*.jpg'));
 numImages = length(imageNameList);
 
-softOutputDir = fullfile('SoftClusterModelOutput');
+softOutputDir = fullfile('SoftClusterModelOutputBOW');
 mkdir(softOutputDir);
-hardOutputDir = fullfile('HardClusterModelOutput');
+hardOutputDir = fullfile('HardClusterModelOutputBOW');
 mkdir(hardOutputDir);
+
+load('BOW.mat');
+featureParameters = bag;
 
 parfor imageIter = 1:numImages
     
@@ -56,7 +59,7 @@ parfor imageIter = 1:numImages
     end
     
     % weight and smap prediction using GMM
-    imageFeatures = combinorGlobalFeatures(rawImage);
+    imageFeatures = combinorGlobalFeatures(rawImage, featureParameters);
     clusterScores = posterior(BestModel, imageFeatures);
     clusterScores = clusterScores / sum(clusterScores);
     weights = zeros(1, numWeights);
