@@ -14,5 +14,7 @@ function [ imageFeatures ] = CombinorGlobalFeatures( image, bag )
   % If you don't normalize resize so that the hisograms of larger images do not
   % have higher numbers than comparable smaller images
   imageFeatures = encode(bag, image, 'Normalization', 'L2');
+  %image = imresize(image, [400, 400]);
+  %imageFeatures = encode(bag, image);
 
 end

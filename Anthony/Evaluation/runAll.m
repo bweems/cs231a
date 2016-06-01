@@ -1,23 +1,24 @@
 imageNamesFile = fullfile('..', 'test.txt');
-outputSuffix = '';
+inputSuffix = 'BOW';
+outputSuffix = 'BOW';
 
-inputDir = fullfile('..', 'SailencyMapCombinor', 'KNNOutput');
-outputDir = strcat('KNNEvalOutputOldFeatures15Segments', outputSuffix);
-inputFileExtension = '.jpg';
-%produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
-
-inputDir = fullfile('..', 'SailencyMapCombinor', 'GMMOutput');
-outputDir = strcat('GMMEvalOutputOldFeatures15Segments', outputSuffix);
-inputFileExtension = '.jpg';
-%produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
-
-inputDir = fullfile('..', 'SailencyMapCombinor', 'SoftClusterModelOutput');
-outputDir = strcat('SoftClusterModelEvalOutputOldFeatures15Segments', outputSuffix);
+inputDir = fullfile('..', 'SailencyMapCombinor', strcat('KNNOutput', inputSuffix));
+outputDir = strcat('KNNEvalOutput', outputSuffix);
 inputFileExtension = '.jpg';
 produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
 
-inputDir = fullfile('..', 'SailencyMapCombinor', 'HardClusterModelOutput');
-outputDir = strcat('HardClusterModelEvalOutputOldFeatures15Segments', outputSuffix);
+inputDir = fullfile('..', 'SailencyMapCombinor', strcat('GMMOutput', inputSuffix));
+outputDir = strcat('GMMEvalOutput', outputSuffix);
+inputFileExtension = '.jpg';
+produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
+
+inputDir = fullfile('..', 'SailencyMapCombinor', strcat('SoftClusterModelOutput', inputSuffix));
+outputDir = strcat('SoftClusterModelEvalOutput', outputSuffix);
+inputFileExtension = '.jpg';
+produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
+
+inputDir = fullfile('..', 'SailencyMapCombinor', strcat('HardClusterModelOutput', inputSuffix));
+outputDir = strcat('HardClusterModelEvalOutput', outputSuffix);
 inputFileExtension = '.jpg';
 produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
 

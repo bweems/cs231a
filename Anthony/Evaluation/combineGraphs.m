@@ -1,4 +1,4 @@
-outputDir = 'CombinedResults';
+outputDir = 'CombinedResultsBOW';
 mkdir(outputDir);
 PRCurveName = 'PR Curve';
 ROCCurveName = 'ROC Curve';
@@ -7,10 +7,10 @@ ROCCurveName = 'ROC Curve';
 
 inputDir = {'DRFIEvalOutput'};
 inputDir = {inputDir{:}, 'DRFIWithUniformWeightsEvalOutput'};
-inputDir = {inputDir{:}, 'KNNEvalOutputOldFeatures15Segments'};
-inputDir = {inputDir{:}, 'GMMEvalOutputOldFeatures15Segments'};
-inputDir = {inputDir{:}, 'SoftClusterModelEvalOutputOldFeatures15Segments'};
-inputDir = {inputDir{:}, 'HardClusterModelEvalOutputOldFeatures15Segments'};
+inputDir = {inputDir{:}, 'KNNEvalOutputBOW'};
+inputDir = {inputDir{:}, 'GMMEvalOutputBOW'};
+inputDir = {inputDir{:}, 'SoftClusterModelEvalOutputBOW'};
+inputDir = {inputDir{:}, 'HardClusterModelEvalOutputBOW'};
 inputNames = { 'DRFI', 'Uniform', ...
 	'KNN', 'GMM', 'Soft', 'Hard'};
 
