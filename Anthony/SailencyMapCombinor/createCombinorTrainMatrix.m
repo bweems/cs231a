@@ -3,7 +3,7 @@
 rng(346374);
 
 weightsOnly = false;
-featuresOnly = true;
+featuresOnly = false;
 
 totalNumImages = 5000;
 trainingImageList = fullfile('..', 'train.txt');
@@ -48,6 +48,7 @@ parfor imageIter = 1:numTrainingImages
     if strcmp(imName(2), '0')
       inx = 1:2;
     end
+    
     rawImage = imread(fullfile(rawImageDir, imName(inx), strcat(imName, '.jpg')));
 
     if ~featuresOnly
