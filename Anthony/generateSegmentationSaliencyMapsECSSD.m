@@ -1,4 +1,5 @@
 %Much of this was copied from Saliency_DRFI.m and demo.m
+
 addpath(genpath('drfi_code_cvpr2013'));
 
 cd('drfi_code_cvpr2013');
@@ -19,43 +20,22 @@ para = makeDefaultParameters();
 
 cd('..');
 
-outputDir = 'MSRA-B-SegmentationSaliencyMaps';
+outputDir = 'ECSSD-SegmentationSaliencyMaps';
 mkdir(outputDir);
 for i=1:para.num_segmentation
    mkdir(fullfile(outputDir,  int2str(i)));
 end
 
-progressFile = fullfile(outputDir, 'Progress.txt');
-
 numSeg = para.num_segmentation;
-for i=horzcat(0:7, 9:10)
-    if exist(progressFile, 'file')
-       fid = fopen(progressFile, 'r');
-       lastDir = fgetl(fid);
-       fclose(fid);
-       if i <= str2num(lastDir)
-           continue;
-       end
-    end
-    imageNames = dir(fullfile('MSRA-B', int2str(i), '*.jpg'));
-    numExisted = 0;
+    imageNames = dir(fullfile('ECSSD', '*.jpg'));
     parfor n=1:length(imageNames)
-        image = imread(fullfile('MSRA-B', int2str(i), imageNames(n).name));
+        fprintf('ImageIteration %d\n', n);
+        image = imread(fullfile('ECSSD', imageNames(n).name));
         exists = true;
         for j=1:numSeg
             exists = exists && exist(fullfile(outputDir, int2str(j), imageNames(n).name), 'file');
         end
-        if exists
-            numExisted = numExisted + 1;
-        end
         if ~exists
             generateSegSMaps( image, classifiers, para, [], outputDir, imageNames(n).name);
-        end  
-        fprintf('ImageIteration %d\n', n);
+        end
     end
-	numExisted
-    dirInMSRAB = i
-    fid = fopen(progressFile, 'w');
-    fprintf(fid, '%d', i);
-    fclose(fid);
-end
