@@ -2,7 +2,7 @@
 % switched for GMM parts
 
 rawImageDir = fullfile('..', 'MSRA-B');
-outputDir = fullfile('GMMOutputBOW')
+outputDir = fullfile('GMMOutputFisher')
 mkdir(outputDir);
 
 imageSaliencyMapDir = fullfile('..', 'MSRA-B-SegmentationSaliencyMaps');
@@ -28,19 +28,14 @@ numImages = length(imageNameList);
 rng(123573);
 [numDataPoints, numWeights] = size(correctWeightsMatrix);
 
-numClusterList = 7:20;
-AIC = zeros(1,length(numClusterList));
-GMModels = cell(1,length(numClusterList));
-for i = 1:length(numClusterList)
-    fprintf('Trying GMM %d clusters of %d \n', i, length(numClusterList));
-    GMModels{i} = fitgmdist(featureMatrix,numClusterList(i),'RegularizationValue', 0.01);
-    AIC(i)= GMModels{i}.AIC;
-end
+modelsDir = 'ClusterModels';
+load(fullfile(modelsDir, 'GMModel.mat')); % 'BestModel'
+GMModel = BestModel;
+numClusters = GMModel.NumComponents;
 
-[minAIC,index] = min(AIC);
-
-GMModel = GMModels{index};
-numClusters = numClusterList(index)
+% For 64 cluster version
+% numClusters = 64;
+% GMModel = fitgmdist(featureMatrix, numClusters, 'RegularizationValue' , 0.001);
 
 clusterWeights = zeros(numClusters, numWeights);
 clusterAssignments = cluster(GMModel, featureMatrix);
@@ -48,8 +43,12 @@ for i = 1:numClusters
     clusterWeights(i, :) = mean(correctWeightsMatrix(clusterAssignments == i, :));
 end
 
-load('BOW.mat');
-featureParameters = bag;
+%load('BOW.mat');
+%featureParameters = bag;
+run('vlfeat/toolbox/vl_setup');
+load(fullfile('FisherModels', 'priors.mat'));
+load(fullfile('FisherModels', 'means.mat'));
+load(fullfile('FisherModels', 'covariances.mat'));
 
 parfor imageIter = 1:numImages
     
@@ -65,10 +64,12 @@ parfor imageIter = 1:numImages
     if strcmp(imageNameList(imageIter).name(2), '0')
       inx = 1:2;
     end
-
-    rawImage = imread(fullfile(rawImageDir, ...
+   
+    rawImageFile = fullfile(rawImageDir, ...
         imageNameList(imageIter).name(inx), ...
-        imageNameList(imageIter).name));
+        imageNameList(imageIter).name);
+
+    rawImage = imread(rawImageFile);
 
     [imh, imw, ~] = size(rawImage);
     smaps = zeros(imh, imw, numSmapDirs);
@@ -78,7 +79,8 @@ parfor imageIter = 1:numImages
     end
     
     % weight and smap prediction using GMM
-    imageFeatures = combinorGlobalFeatures(rawImage, featureParameters);
+    % imageFeatures = combinorGlobalFeatures(rawImage, featureParameters);
+    imageFeatures = getFisherEmbedding(rawImageFile, means, covariances, priors);
     clusterScores = posterior(GMModel, imageFeatures);
     clusterScores = clusterScores / sum(clusterScores);
     weights = zeros(1, numWeights);

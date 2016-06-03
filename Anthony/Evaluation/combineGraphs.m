@@ -1,17 +1,18 @@
-outputDir = 'CombinedResultsBOW';
+outputDir = 'CombinedResultsFisher';
 mkdir(outputDir);
 PRCurveName = 'PR Curve';
 ROCCurveName = 'ROC Curve';
 
 % Note that I added the Train suffix to the inputDirs and outputDir
 
+% update output dir as well
 inputDir = {'DRFIEvalOutput'};
-inputDir = {inputDir{:}, 'DRFIWithUniformWeightsEvalOutput'};
-inputDir = {inputDir{:}, 'KNNEvalOutputBOW'};
-inputDir = {inputDir{:}, 'GMMEvalOutputBOW'};
-inputDir = {inputDir{:}, 'SoftClusterModelEvalOutputBOW'};
-inputDir = {inputDir{:}, 'HardClusterModelEvalOutputBOW'};
-inputNames = { 'DRFI', 'Uniform', ...
+%inputDir = {inputDir{:}, 'DRFIWithUniformWeightsEvalOutput'};
+inputDir = {inputDir{:}, 'KNNEvalOutputFisher'};
+inputDir = {inputDir{:}, 'GMMEvalOutputFisher'};
+inputDir = {inputDir{:}, 'SoftClusterModelEvalOutputFisher'};
+inputDir = {inputDir{:}, 'HardClusterModelEvalOutputFisher'};
+inputNames = { 'DRFI', ... 'Uniform', ...
 	'KNN', 'GMM', 'Soft', 'Hard'};
 
 prCurve = figure('visible','off');

@@ -1,5 +1,5 @@
 rawImageDir = fullfile('..', 'MSRA-B');
-outputDir = fullfile('KNNOutputBOW');
+outputDir = fullfile('KNNOutputFisher');
 mkdir(outputDir);
 
 imageSaliencyMapDir = fullfile('..', 'MSRA-B-SegmentationSaliencyMaps');
@@ -23,8 +23,12 @@ imageNameList = dir(fullfile(imageSaliencyMapDir, '1', '*.jpg'));
 numImages = length(imageNameList);
 
 K = 20;
-load('BOW.mat');
-featureParameters = bag;
+%load('BOW.mat');
+%featureParameters = bag;
+run('vlfeat/toolbox/vl_setup');
+load(fullfile('FisherModels', 'priors.mat'));
+load(fullfile('FisherModels', 'means.mat'));
+load(fullfile('FisherModels', 'covariances.mat'));
 
 
 parfor imageIter = 1:numImages
@@ -42,9 +46,11 @@ parfor imageIter = 1:numImages
       inx = 1:2;
     end
     
-    rawImage = imread(fullfile(rawImageDir, ...
+    rawImageFile = fullfile(rawImageDir, ...
         imageNameList(imageIter).name(inx), ...
-        imageNameList(imageIter).name));
+        imageNameList(imageIter).name);
+
+    rawImage = imread(rawImageFile);
 
     [imh, imw, ~] = size(rawImage);
     smaps = zeros(imh, imw, numSmapDirs);
@@ -54,7 +60,7 @@ parfor imageIter = 1:numImages
           imageNameList(imageIter).name)));
     end
     
-    smap = knnPrediction(featureMatrix, correctWeightsMatrix, rawImage, smaps, K, featureParameters);
+    smap = knnPrediction(featureMatrix, correctWeightsMatrix, rawImage, smaps, K, rawImageFile, means, covariances, priors);
 
     imwrite(smap, outputFile);
 end

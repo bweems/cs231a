@@ -1,6 +1,6 @@
 imageNamesFile = fullfile('..', 'test.txt');
-inputSuffix = 'BOW';
-outputSuffix = 'BOW';
+inputSuffix = 'Fisher';
+outputSuffix = 'Fisher';
 
 inputDir = fullfile('..', 'SailencyMapCombinor', strcat('KNNOutput', inputSuffix));
 outputDir = strcat('KNNEvalOutput', outputSuffix);
