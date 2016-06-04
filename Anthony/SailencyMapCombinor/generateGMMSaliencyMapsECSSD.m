@@ -1,9 +1,11 @@
 % This is a copy of generateKNNSaliencyMaps except with the KNN parts
 % switched for GMM parts
 
-rawImageDir = fullfile('..', 'MSRA-B');
+rawImageDir = fullfile('..', 'ECSSD');
+outputDir = fullfile('GMMOutputFisherECSSD')
+mkdir(outputDir);
 
-imageSaliencyMapDir = fullfile('..', 'MSRA-B-SegmentationSaliencyMaps');
+imageSaliencyMapDir = fullfile('..', 'ECSSD-SegmentationSaliencyMaps');
 smapDirectories = dir(imageSaliencyMapDir);
 % Remove '.' and '..'
 ind = [];
@@ -17,18 +19,29 @@ end
 smapDirectories(ind) = [];
 numSmapDirs = length(smapDirectories);
 
-modelsDir = 'ClusterModels';
-load(fullfile(modelsDir, 'GMModel.mat')); % 'BestModel'
-load(fullfile(modelsDir, 'ClusterWeights.mat')); %'clusterWeights');
-[numClusters, numWeights] = size(clusterWeights);
+featureMatrix = csvread('featureMatrix.csv');
+correctWeightsMatrix = csvread('outputMatrix.csv');
 
 imageNameList = dir(fullfile(imageSaliencyMapDir, '1', '*.jpg'));
 numImages = length(imageNameList);
 
-softOutputDir = fullfile('testSoftClusterModelOutputFisher');
-mkdir(softOutputDir);
-hardOutputDir = fullfile('testHardClusterModelOutputFisher');
-mkdir(hardOutputDir);
+rng(123573);
+[numDataPoints, numWeights] = size(correctWeightsMatrix);
+
+modelsDir = 'ClusterModels';
+load(fullfile(modelsDir, 'GMModel.mat')); % 'BestModel'
+GMModel = BestModel;
+numClusters = GMModel.NumComponents;
+
+% For 64 cluster version
+% numClusters = 64;
+% GMModel = fitgmdist(featureMatrix, numClusters, 'RegularizationValue' , 0.001);
+
+clusterWeights = zeros(numClusters, numWeights);
+clusterAssignments = cluster(GMModel, featureMatrix);
+for i = 1:numClusters
+    clusterWeights(i, :) = mean(correctWeightsMatrix(clusterAssignments == i, :));
+end
 
 %load('BOW.mat');
 %featureParameters = bag;
@@ -41,23 +54,17 @@ parfor imageIter = 1:numImages
     
     fprintf('Image iter: %d\n', imageIter);
 
-    softOutputFile = fullfile(softOutputDir, imageNameList(imageIter).name);
+    outputFile = fullfile(outputDir, imageNameList(imageIter).name);
 
-    if exist(softOutputFile, 'file')
+    if exist(outputFile, 'file')
        continue;
     end
     
-    inx = 1;
-    if strcmp(imageNameList(imageIter).name(2), '0')
-      inx = 1:2;
-    end
-
+   
     rawImageFile = fullfile(rawImageDir, ...
-        imageNameList(imageIter).name(inx), ...
         imageNameList(imageIter).name);
 
     rawImage = imread(rawImageFile);
-
 
     [imh, imw, ~] = size(rawImage);
     smaps = zeros(imh, imw, numSmapDirs);
@@ -69,7 +76,7 @@ parfor imageIter = 1:numImages
     % weight and smap prediction using GMM
     % imageFeatures = combinorGlobalFeatures(rawImage, featureParameters);
     imageFeatures = getFisherEmbedding(rawImageFile, means, covariances, priors);
-    clusterScores = posterior(BestModel, imageFeatures);
+    clusterScores = posterior(GMModel, imageFeatures);
     clusterScores = clusterScores / sum(clusterScores);
     weights = zeros(1, numWeights);
     for clusIter = 1:numClusters
@@ -77,13 +84,5 @@ parfor imageIter = 1:numImages
     end
     smap = combineSmapsWithWeights( weights, smaps );
 
-    imwrite(smap, softOutputFile);
-    
-    
-    hardOutputFile = fullfile(hardOutputDir, imageNameList(imageIter).name);
-    
-    clusterIndex = cluster(BestModel, imageFeatures);
-    smap = combineSmapsWithWeights( clusterWeights(clusterIndex, :), smaps );
-
-    imwrite(smap, hardOutputFile);
+    imwrite(smap, outputFile);
 end

@@ -1,4 +1,4 @@
-outputDir = 'CombinedResultsFisher';
+outputDir = 'CombinedResultsNewFisher';
 mkdir(outputDir);
 PRCurveName = 'PR Curve';
 ROCCurveName = 'ROC Curve';
@@ -8,10 +8,10 @@ ROCCurveName = 'ROC Curve';
 % update output dir as well
 inputDir = {'DRFIEvalOutput'};
 %inputDir = {inputDir{:}, 'DRFIWithUniformWeightsEvalOutput'};
-inputDir = {inputDir{:}, 'KNNEvalOutputFisher'};
-inputDir = {inputDir{:}, 'GMMEvalOutputFisher'};
-inputDir = {inputDir{:}, 'SoftClusterModelEvalOutputFisher'};
-inputDir = {inputDir{:}, 'HardClusterModelEvalOutputFisher'};
+inputDir = {inputDir{:}, 'KNNEvalOutputNewFisher'};
+inputDir = {inputDir{:}, 'GMMEvalOutputNewFisher'};
+inputDir = {inputDir{:}, 'SoftClusterModelEvalOutputNewFisher'};
+inputDir = {inputDir{:}, 'HardClusterModelEvalOutputNewFisher'};
 inputNames = { 'DRFI', ... 'Uniform', ...
 	'KNN', 'GMM', 'Soft', 'Hard'};
 

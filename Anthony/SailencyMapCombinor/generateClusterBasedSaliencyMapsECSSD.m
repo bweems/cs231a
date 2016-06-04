@@ -1,9 +1,9 @@
 % This is a copy of generateKNNSaliencyMaps except with the KNN parts
 % switched for GMM parts
 
-rawImageDir = fullfile('..', 'MSRA-B');
+rawImageDir = fullfile('..', 'ECSSD');
 
-imageSaliencyMapDir = fullfile('..', 'MSRA-B-SegmentationSaliencyMaps');
+imageSaliencyMapDir = fullfile('..', 'ECSSD-SegmentationSaliencyMaps');
 smapDirectories = dir(imageSaliencyMapDir);
 % Remove '.' and '..'
 ind = [];
@@ -25,9 +25,9 @@ load(fullfile(modelsDir, 'ClusterWeights.mat')); %'clusterWeights');
 imageNameList = dir(fullfile(imageSaliencyMapDir, '1', '*.jpg'));
 numImages = length(imageNameList);
 
-softOutputDir = fullfile('testSoftClusterModelOutputFisher');
+softOutputDir = fullfile('SoftClusterModelOutputFisherECSSD');
 mkdir(softOutputDir);
-hardOutputDir = fullfile('testHardClusterModelOutputFisher');
+hardOutputDir = fullfile('HardClusterModelOutputFisherECSSD');
 mkdir(hardOutputDir);
 
 %load('BOW.mat');
@@ -46,14 +46,8 @@ parfor imageIter = 1:numImages
     if exist(softOutputFile, 'file')
        continue;
     end
-    
-    inx = 1;
-    if strcmp(imageNameList(imageIter).name(2), '0')
-      inx = 1:2;
-    end
 
     rawImageFile = fullfile(rawImageDir, ...
-        imageNameList(imageIter).name(inx), ...
         imageNameList(imageIter).name);
 
     rawImage = imread(rawImageFile);
