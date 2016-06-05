@@ -2,7 +2,7 @@
 % switched for GMM parts
 
 rawImageDir = fullfile('..', 'ECSSD');
-outputDir = fullfile('GMMOutputFisherECSSD')
+outputDir = fullfile('GMMOutputBOVWECSSD')
 mkdir(outputDir);
 
 imageSaliencyMapDir = fullfile('..', 'ECSSD-SegmentationSaliencyMaps');
@@ -43,12 +43,12 @@ for i = 1:numClusters
     clusterWeights(i, :) = mean(correctWeightsMatrix(clusterAssignments == i, :));
 end
 
-%load('BOW.mat');
-%featureParameters = bag;
-run('vlfeat/toolbox/vl_setup');
-load(fullfile('FisherModels', 'priors.mat'));
-load(fullfile('FisherModels', 'means.mat'));
-load(fullfile('FisherModels', 'covariances.mat'));
+load('BOW.mat');
+featureParameters = bag;
+%run('vlfeat/toolbox/vl_setup');
+%load(fullfile('FisherModels', 'priors.mat'));
+%load(fullfile('FisherModels', 'means.mat'));
+%load(fullfile('FisherModels', 'covariances.mat'));
 
 parfor imageIter = 1:numImages
     
@@ -74,8 +74,8 @@ parfor imageIter = 1:numImages
     end
     
     % weight and smap prediction using GMM
-    % imageFeatures = combinorGlobalFeatures(rawImage, featureParameters);
-    imageFeatures = getFisherEmbedding(rawImageFile, means, covariances, priors);
+    imageFeatures = combinorGlobalFeatures(rawImage, featureParameters);
+    % imageFeatures = getFisherEmbedding(rawImageFile, means, covariances, priors);
     clusterScores = posterior(GMModel, imageFeatures);
     clusterScores = clusterScores / sum(clusterScores);
     weights = zeros(1, numWeights);

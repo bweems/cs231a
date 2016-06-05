@@ -25,17 +25,17 @@ load(fullfile(modelsDir, 'ClusterWeights.mat')); %'clusterWeights');
 imageNameList = dir(fullfile(imageSaliencyMapDir, '1', '*.jpg'));
 numImages = length(imageNameList);
 
-softOutputDir = fullfile('SoftClusterModelOutputFisherECSSD');
+softOutputDir = fullfile('SoftClusterModelOutputBOVWECSSD');
 mkdir(softOutputDir);
-hardOutputDir = fullfile('HardClusterModelOutputFisherECSSD');
+hardOutputDir = fullfile('HardClusterModelOutputBOVWECSSD');
 mkdir(hardOutputDir);
 
-%load('BOW.mat');
-%featureParameters = bag;
-run('vlfeat/toolbox/vl_setup');
-load(fullfile('FisherModels', 'priors.mat'));
-load(fullfile('FisherModels', 'means.mat'));
-load(fullfile('FisherModels', 'covariances.mat'));
+load('BOW.mat');
+featureParameters = bag;
+%run('vlfeat/toolbox/vl_setup');
+%load(fullfile('FisherModels', 'priors.mat'));
+%load(fullfile('FisherModels', 'means.mat'));
+%load(fullfile('FisherModels', 'covariances.mat'));
 
 parfor imageIter = 1:numImages
     
@@ -61,8 +61,8 @@ parfor imageIter = 1:numImages
     end
     
     % weight and smap prediction using GMM
-    % imageFeatures = combinorGlobalFeatures(rawImage, featureParameters);
-    imageFeatures = getFisherEmbedding(rawImageFile, means, covariances, priors);
+    imageFeatures = combinorGlobalFeatures(rawImage, featureParameters);
+    % imageFeatures = getFisherEmbedding(rawImageFile, means, covariances, priors);
     clusterScores = posterior(BestModel, imageFeatures);
     clusterScores = clusterScores / sum(clusterScores);
     weights = zeros(1, numWeights);

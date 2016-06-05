@@ -1,15 +1,16 @@
-outputDir = 'BB-Soft-Fisher-Output';
+outputDir = 'BB-GMM-Fisher-Output-ECSSD';
 mkdir(outputDir);
 
-inputDir = fullfile('..', 'SailencyMapCombinor', 'SoftClusterModelOutputFisher');
-%inputDir = fullfile('..', 'DRFI-Output');
+ inputDir = fullfile('..', 'SailencyMapCombinor', 'GMMOutputFisherECSSD');
+% inputDir = fullfile('..', 'DRFI-Output-ECSSD');
 
 fileExtension = '.jpg';
 % inputRegex = fullfile(inputDir, strcat('*', fileExtension))
 % imageNames = dir(inputRegex);
 % numImages = length(imageNames)
 
-fid = fopen(fullfile('..', 'test.txt'));
+%fid = fopen(fullfile('..', 'test.txt'));
+fid = fopen(fullfile('..', 'ECSSDFiles.txt'));
 imageNames = textscan(fid, '%s\n');
 imageNames = imageNames{1};
 numImages = length(imageNames);
