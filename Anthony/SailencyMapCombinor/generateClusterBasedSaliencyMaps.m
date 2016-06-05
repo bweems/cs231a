@@ -37,6 +37,7 @@ load(fullfile('FisherModels', 'priors.mat'));
 load(fullfile('FisherModels', 'means.mat'));
 load(fullfile('FisherModels', 'covariances.mat'));
 
+parfor imageIter = 1:numImages
     softOutputFile = fullfile(softOutputDir, imageNameList(imageIter).name);
 
     if exist(softOutputFile, 'file')
