@@ -25,9 +25,9 @@ load(fullfile(modelsDir, 'ClusterWeights.mat')); %'clusterWeights');
 imageNameList = dir(fullfile(imageSaliencyMapDir, '1', '*.jpg'));
 numImages = length(imageNameList);
 
-softOutputDir = fullfile('testSoftClusterModelOutputFisher');
+softOutputDir = fullfile('testSoftClusterModelOutputFisher17SMaps');
 mkdir(softOutputDir);
-hardOutputDir = fullfile('testHardClusterModelOutputFisher');
+hardOutputDir = fullfile('testHardClusterModelOutputFisher17SMaps');
 mkdir(hardOutputDir);
 
 %load('BOW.mat');
@@ -36,10 +36,6 @@ run('vlfeat/toolbox/vl_setup');
 load(fullfile('FisherModels', 'priors.mat'));
 load(fullfile('FisherModels', 'means.mat'));
 load(fullfile('FisherModels', 'covariances.mat'));
-
-parfor imageIter = 1:numImages
-    
-    fprintf('Image iter: %d\n', imageIter);
 
     softOutputFile = fullfile(softOutputDir, imageNameList(imageIter).name);
 
@@ -63,7 +59,7 @@ parfor imageIter = 1:numImages
     smaps = zeros(imh, imw, numSmapDirs);
     for segmentationIter = 1:numSmapDirs
       smaps(:, :, segmentationIter) = im2double(imread( ...
-          fullfile( imageSaliencyMapDir, int2str(segmentationIter), imageNameList(imageIter).name )));
+          fullfile( imageSaliencyMapDir, smapDirectories(segmentationIter).name, imageNameList(imageIter).name )));
     end
     
     % weight and smap prediction using GMM

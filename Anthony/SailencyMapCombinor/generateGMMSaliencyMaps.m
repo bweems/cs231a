@@ -2,7 +2,7 @@
 % switched for GMM parts
 
 rawImageDir = fullfile('..', 'MSRA-B');
-outputDir = fullfile('GMMOutputFisher')
+outputDir = fullfile('GMMOutputFisher17SMaps')
 mkdir(outputDir);
 
 imageSaliencyMapDir = fullfile('..', 'MSRA-B-SegmentationSaliencyMaps');
@@ -75,7 +75,7 @@ parfor imageIter = 1:numImages
     smaps = zeros(imh, imw, numSmapDirs);
     for segmentationIter = 1:numSmapDirs
       smaps(:, :, segmentationIter) = im2double(imread( ...
-          fullfile( imageSaliencyMapDir, int2str(segmentationIter), imageNameList(imageIter).name )));
+          fullfile( imageSaliencyMapDir, smapDirectories(segmentationIter).name, imageNameList(imageIter).name )));
     end
     
     % weight and smap prediction using GMM

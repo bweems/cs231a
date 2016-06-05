@@ -2,8 +2,8 @@
 
 rng(346374);
 
-weightsOnly = false;
-featuresOnly = true;
+weightsOnly = true;
+featuresOnly = false;
 
 totalNumImages = 5000;
 trainingImageList = fullfile('..', 'train.txt');
@@ -23,6 +23,7 @@ groundTruthDir = fullfile('..', 'MSRA-B-annot' ,'annotation');
 % Note the raw images and smaps are in jpg format but annotations are png
 
 smapDirectories = dir(imageSaliencyMapDir);
+
 % Remove '.' and '..'
 ind = [];
 for ix = 1 : length(smapDirectories)
@@ -41,7 +42,7 @@ featureExtractorParams = bag;
 featureCellArray = {numTrainingImages, 1};
 correctWeightsCellArray = {numTrainingImages, 1};
 
-parfor imageIter = 1:numTrainingImages
+for imageIter = 1:numTrainingImages
     
     fprintf('Image Iteration %d\n', imageIter);
 
@@ -64,10 +65,8 @@ parfor imageIter = 1:numTrainingImages
     gTruth = imread(fullfile(groundTruthDir, strcat(imName, '.png')));
     
     % Find the combination weights that minimize error
-
-    correctWeights = findCorrectWeights(gTruth, smaps);
     
-    correctWeightsCellArray{imageIter, 1} = correctWeights';
+    correctWeightsCellArray{imageIter, 1} = findCorrectWeights(gTruth, smaps)';
     
     end
 

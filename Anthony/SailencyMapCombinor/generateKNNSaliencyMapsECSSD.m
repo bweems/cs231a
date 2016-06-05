@@ -1,8 +1,8 @@
-rawImageDir = fullfile('..', 'MSRA-B');
-outputDir = fullfile('KNNOutputFisher17SMaps');
+rawImageDir = fullfile('..', 'ECSSD');
+outputDir = fullfile('KNNOutputFisherECSSD');
 mkdir(outputDir);
 
-imageSaliencyMapDir = fullfile('..', 'MSRA-B-SegmentationSaliencyMaps');
+imageSaliencyMapDir = fullfile('..', 'ECSSD-SegmentationSaliencyMaps');
 smapDirectories = dir(imageSaliencyMapDir);
 % Remove '.' and '..'
 ind = [];
@@ -40,14 +40,8 @@ parfor imageIter = 1:numImages
     if exist(outputFile, 'file')
        continue;
     end
-
-    inx = 1;
-    if strcmp(imageNameList(imageIter).name(2), '0')
-      inx = 1:2;
-    end
     
     rawImageFile = fullfile(rawImageDir, ...
-        imageNameList(imageIter).name(inx), ...
         imageNameList(imageIter).name);
 
     rawImage = imread(rawImageFile);
