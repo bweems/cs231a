@@ -21,6 +21,9 @@ Alternatively use createClusterModelAndWeights and then use generateClusterSalie
 Once you have an output, if you want to evaluate your method look under the Evaluation subfolder and look at quickRunEval.  Modify the inputDir, outputDir, and inputExtension variables to the output you produce
 The quickRunEval function looks for a directory called gtDir that has all the ground truth saliency maps, point this to the correct directory once and forget it.
 
+To generate fisher embeddings of images, first run generateGMMForFisherEmbedding.m in SailencyMapCombinor to generate the means, covariances, and priors of a GMM to be used for the fisher vectors.  Then run getFisherEmbedding(im, means, covariances, priors), where im is the path to the file and means, covariances, and priors are those of the GMM just created to get the fisher embedding.
+
+
 Directory Structure
 root
 root/train.txt % These files are provided from the drfi website
@@ -33,3 +36,5 @@ root/SailencyMapCombinor
 rool/SailencyMapCombinor/vlfeat
 root/Evaluation
 root/BoundingBoxes
+
+

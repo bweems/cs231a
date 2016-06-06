@@ -6,4 +6,3 @@ function [embedding] = getFisherEmbedding(im, means, covariances, priors)
     embedding = vl_fisher(img_sift, means, covariances, priors);
 
     embedding = embedding'; % For consistency across the feature API we return row vectors
-end

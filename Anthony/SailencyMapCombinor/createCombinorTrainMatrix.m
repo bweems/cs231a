@@ -2,7 +2,7 @@
 
 rng(346374);
 
-weightsOnly = true;
+weightsOnly = false;
 featuresOnly = false;
 
 totalNumImages = 5000;
@@ -52,6 +52,7 @@ for imageIter = 1:numTrainingImages
     if strcmp(imName(2), '0')
       inx = 1:2;
     end
+    
     rawImage = imread(fullfile(rawImageDir, imName(inx), strcat(imName, '.jpg')));
 
     if ~featuresOnly
