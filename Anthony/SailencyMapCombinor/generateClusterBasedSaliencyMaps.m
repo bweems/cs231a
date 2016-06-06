@@ -25,9 +25,9 @@ load(fullfile(modelsDir, 'ClusterWeights.mat')); %'clusterWeights');
 imageNameList = dir(fullfile(imageSaliencyMapDir, '1', '*.jpg'));
 numImages = length(imageNameList);
 
-softOutputDir = fullfile('testSoftClusterModelOutputFisher17SMaps');
+softOutputDir = fullfile('SoftClusterModelOutputFisher17SMaps');
 mkdir(softOutputDir);
-hardOutputDir = fullfile('testHardClusterModelOutputFisher17SMaps');
+hardOutputDir = fullfile('HardClusterModelOutputFisher17SMaps');
 mkdir(hardOutputDir);
 
 %load('BOW.mat');
