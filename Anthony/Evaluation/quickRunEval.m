@@ -8,7 +8,7 @@
 %inputDir = fullfile('..', 'DRFI-UW-Output');
 %outputDir = 'DRFIWithUniformWeightsEvalOutput';
 %inputFileExtension = '.png';
-inputDir = fullfile('..', 'SailencyMapCombinor', 'GMMOutputFisher64Cluster');
-outputDir = 'GMMEvalOutputFisher64Cluster';
+inputDir = fullfile('..', 'SailencyMapCombinor', 'GMMOutputFisher');
+outputDir = 'GMMEvalOutputNewFisher';
 inputFileExtension = '.jpg';
 produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, fullfile('..', 'test.txt'), outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');

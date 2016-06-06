@@ -1,6 +1,6 @@
-outputDir = 'CombinedResultsDatasetComparison';
+outputDir = 'CombinedResults17SMapsFisher';
 mkdir(outputDir);
-prefix = 'Dataset ';
+prefix = 'Additional Saliency Maps ';
 PRCurveName = [prefix, 'PR Curve'];
 ROCCurveName = [prefix, 'ROC Curve'];
 AUCPlotName = [prefix, 'AUC Comparison'];
@@ -8,19 +8,15 @@ AUCPlotName = [prefix, 'AUC Comparison'];
 % Note that I added the Train suffix to the inputDirs and outputDir
 
 % update output dir as well
-inputSuffix = 'NewFisher';
+inputSuffix = '17SMapsFisher';
+%inputDir = {'BenEvalOutput'};
+%inputDir = {inputDir{:}, 'KaranEvalOutput'};
 inputDir = {'DRFIEvalOutput'};
-inputDir = {inputDir{:}, 'DRFIEvalOutputECSSD'};
 inputDir = {inputDir{:}, ['KNNEvalOutput', inputSuffix]};
-inputDir = {inputDir{:}, ['KNNEvalOutput', inputSuffix, 'ECSSD']};
 inputDir = {inputDir{:}, ['GMMEvalOutput', inputSuffix]};
-inputDir = {inputDir{:}, ['GMMEvalOutput', inputSuffix, 'ECSSD']};
 inputDir = {inputDir{:}, ['SoftClusterModelEvalOutput', inputSuffix]};
-inputDir = {inputDir{:}, ['SoftClusterModelEvalOutput', inputSuffix, 'ECSSD']};
 inputDir = {inputDir{:}, ['HardClusterModelEvalOutput', inputSuffix]};
-inputDir = {inputDir{:}, ['HardClusterModelEvalOutput', inputSuffix, 'ECSSD']};
-inputNames = { 'DRFI-MSRA', 'DRFI-ECSSD', 'KNN-MSRA', 'KNN-ECSSD', ...
-          'GMM-MSRA', 'GMM-ECSSD', 'Soft-MRSA', 'Soft-ECSSD', 'Hard-MRSA', 'Hard-ECSSD' };
+inputNames = { 'DRFI', 'KNN', 'GMM', 'Soft', 'Hard' };
 
 prCurve = figure('visible','off');
 ylabel('Precision');

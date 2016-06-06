@@ -1,6 +1,6 @@
 imageNamesFile = fullfile('..', 'test.txt');
-inputSuffix = 'Fisher';
-outputSuffix = 'NewFisher';
+inputSuffix = 'Fisher17SMaps';
+outputSuffix = '17SMapsFisher';
 
 inputDir = fullfile('..', 'SailencyMapCombinor', strcat('KNNOutput', inputSuffix));
 outputDir = strcat('KNNEvalOutput', outputSuffix);
@@ -21,17 +21,6 @@ inputDir = fullfile('..', 'SailencyMapCombinor', strcat('HardClusterModelOutput'
 outputDir = strcat('HardClusterModelEvalOutput', outputSuffix);
 inputFileExtension = '.jpg';
 produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
-
-
-inputDir = fullfile('..', 'DRFI-Output');
-outputDir = strcat('DRFIEvalOutput', outputSuffix);
-inputFileExtension = '.png';
-%produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
-
-inputDir = fullfile('..', 'DRFI-UW-Output');
-outputDir = strcat('DRFIWithUniformWeightsEvalOutput', outputSuffix);
-inputFileExtension = '.png';
-%produceEvaluationGraphs('gtDir', inputDir, inputFileExtension, imageNamesFile, outputDir, 'PR Curve', 'ROC Curve', 'AUCScore');
 
 
 
