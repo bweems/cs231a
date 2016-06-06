@@ -3,7 +3,7 @@
 Install/setup
 under the Anthony directory put the MSRA-B directory and the MSRA-B-annot directory
 put the drfi code under the Anthony directory as well - note that there are two versions of this code base and we use the older version from 2013
-Create a directory called under the directory (should already exist if you pulled from git) and place vlfeat under this directory
+Create a directory called SailencyMapCombinor under the directory (should already exist if you pulled from git) and place vlfeat under this directory
 
 MSRA-B : http://research.microsoft.com/en-us/um/people/jiansun/SalientObject/salient_object.htm
 ECSSD: http://www.cse.cuhk.edu.hk/leojia/projects/hsaliency/dataset.html
@@ -30,5 +30,6 @@ root/MSRA-B
 root/MSRA-B-annot
 root/drfi_code_cvpr2013
 root/SailencyMapCombinor
+rool/SailencyMapCombinor/vlfeat
 root/Evaluation
 root/BoundingBoxes
