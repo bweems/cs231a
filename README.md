@@ -8,7 +8,7 @@ Create a directory called SailencyMapCombinor under the directory (should alread
 MSRA-B : http://research.microsoft.com/en-us/um/people/jiansun/SalientObject/salient_object.htm
 ECSSD: http://www.cse.cuhk.edu.hk/leojia/projects/hsaliency/dataset.html
 
-See the 'Karan' branch for context aware saliency code
+See the 'Karan' branch for context aware saliency code and the 'bweems' branch for the patch distinct code.
 
 Note: all files expect to be run from the directory they are housed in.
 Data set directories should only contain the approproate images, beware of compression artifacts
